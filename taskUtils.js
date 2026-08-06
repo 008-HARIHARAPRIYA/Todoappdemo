@@ -8,6 +8,6 @@ function markCompleted(button) {
 
     const task = button.parentElement.parentElement;
 
-    task.classList.toggle("completed");
+    task.classList.toggle("completed successfully");
 
 }
