@@ -13,14 +13,15 @@ function addTask() {
 
     li.innerHTML = `
         <span>${task}</span>
-        <span class="delete" onclick="deleteTask(this)">❌</span>
+
+        <div class="actions">
+            <button class="complete-btn" onclick="markCompleted(this)">✔</button>
+
+            <button class="delete-btn" onclick="deleteTask(this)">❌</button>
+        </div>
     `;
 
     document.getElementById("taskList").appendChild(li);
 
     input.value = "";
-}
-
-function deleteTask(element) {
-    element.parentElement.remove();
 }
