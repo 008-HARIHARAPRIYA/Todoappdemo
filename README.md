@@ -1,170 +1,100 @@
 # Todo App
 
-This project is a simple, client-side web application designed to manage a list of tasks. Users can add new tasks and remove existing ones directly within the browser interface.
+A simple client-side web application designed to help users manage their daily tasks. This application allows users to add new tasks, mark existing tasks as completed, and remove tasks from their list.
 
 ## Features
 
-*   **Add Tasks:** Users can input text into a dedicated field and add it as a new task to a dynamic list.
-*   **Input Validation:** Prevents adding empty tasks by prompting an alert if the input field is blank.
-*   **Delete Tasks:** Each task in the list includes a delete control (❌ icon) that allows users to remove individual tasks.
-*   **Responsive Viewport:** Configured for basic responsiveness across different device widths using the viewport meta tag.
+Based solely on the provided code, the application offers the following features:
+
+*   **Add Tasks:** Users can input a task description and add it to a dynamic list.
+*   **Input Validation:** Prevents adding empty tasks with a client-side alert.
+*   **Mark Tasks as Completed:** Tasks can be toggled between a standard and a "completed" state, visually represented by a line-through and gray text.
+*   **Delete Tasks:** Users can remove individual tasks from the list.
+*   **Responsive Styling:** Basic styling to ensure a clean and centered user interface.
 
 ## Technology Stack
 
-*   **HTML5:** Structures the content of the web page, including the task input, buttons, and task list.
-*   **CSS3:** Styles the appearance of the application, providing a clean and centered layout, task item styling, and interactive button effects.
-*   **JavaScript (ES6+):** Implements the interactive functionality for adding and deleting tasks without requiring page reloads.
+*   **HTML5:** For structuring the web page content.
+*   **CSS3:** For styling the application's appearance and layout.
+*   **JavaScript (Client-Side):** For implementing dynamic functionality and user interaction.
 
 ## File Structure Overview
-
-The project consists of three core files:
 
 ```
 .
 ├── index.html
 ├── script.js
-└── style.css
+├── style.css
+└── taskUtils.js
 ```
 
-*   `index.html`: The main HTML file that defines the structure and content of the web page. It links to the CSS and JavaScript files.
-*   `script.js`: Contains the JavaScript functions that handle user interactions, such as adding and deleting tasks.
-*   `style.css`: Provides all the cascading style sheet rules to define the visual presentation of the application.
+*   `index.html`: The main HTML file that provides the structure of the Todo App, including the input field, add button, and the task list container. It links to the CSS and JavaScript files.
+*   `script.js`: Contains the core JavaScript logic for adding new tasks to the list.
+*   `style.css`: Defines all the visual styles for the application, including layout, colors, and typography.
+*   `taskUtils.js`: Contains utility JavaScript functions specifically for handling task-related actions like deleting and marking tasks as complete.
 
-## How to Run
+## How to Run/Compile
 
-To run this application, simply follow these steps:
+This is a client-side web application and does not require any compilation or complex setup.
 
-1.  Save the `index.html`, `script.js`, and `style.css` files in the same directory on your local machine.
-2.  Open the `index.html` file in any modern web browser (e.g., Chrome, Firefox, Safari, Edge).
+1.  **Save the files:** Ensure all four files (`index.html`, `script.js`, `style.css`, `taskUtils.js`) are saved in the same directory.
+2.  **Open `index.html`:** Simply open the `index.html` file in any modern web browser (e.g., Chrome, Firefox, Safari, Edge).
 
-The application will load directly in your browser, ready for use. No compilation or server setup is required.
+The application will load directly in your browser.
 
 ## Code Highlights and Important Components
 
 ### `index.html`
 
-*   **Viewport Meta Tag:**
-    ```html
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    ```
-    Ensures the app is rendered appropriately on various device sizes.
-*   **Task Input and Add Button:**
-    ```html
-    <div class="input-box">
-        <input type="text" id="taskInput" placeholder="Enter a task">
-        <button onclick="addTask()">Add</button>
-    </div>
-    ```
-    The `input` field (`id="taskInput"`) is where users type tasks. The `button` triggers the `addTask()` JavaScript function when clicked.
-*   **Task List Container:**
-    ```html
-    <ul id="taskList"></ul>
-    ```
-    This unordered list (`id="taskList"`) serves as the container where new tasks will be dynamically added by JavaScript.
-*   **Script Inclusion:**
-    ```html
-    <script src="script.js"></script>
-    ```
-    Links the JavaScript file at the end of the `<body>` for better performance.
+*   **Structure:** Defines the basic layout with a main container, an input box for new tasks, and an unordered list (`<ul id="taskList">`) to display tasks.
+*   **External Resources:** Links `style.css` for styling and includes `taskUtils.js` and `script.js` as external JavaScript files for functionality.
+*   **Inline Event Handlers:** The "Add" button uses `onclick="addTask()"` to trigger JavaScript functionality directly from HTML.
 
 ### `script.js`
 
 *   **`addTask()` Function:**
-    ```javascript
-    function addTask() {
-        const input = document.getElementById("taskInput");
-        const task = input.value.trim();
+    *   Retrieves the value from the input field (`#taskInput`).
+    *   Performs basic validation: if the input is empty or contains only whitespace, it displays an `alert`.
+    *   Dynamically creates a new `<li>` element for each task.
+    *   Populates the `<li>`'s `innerHTML` with the task text and two buttons: "Complete" (`✔`) and "Delete" (`❌`).
+    *   These buttons also use `onclick` handlers, `markCompleted(this)` and `deleteTask(this)`, pointing to functions in `taskUtils.js`.
+    *   Appends the newly created task `<li>` to the `taskList` `<ul>`.
+    *   Clears the input field after adding a task.
 
-        if (task === "") {
-            alert("Please enter a task.");
-            return;
-        }
+### `taskUtils.js`
 
-        const li = document.createElement("li");
-        li.innerHTML = `
-            <span>${task}</span>
-            <span class="delete" onclick="deleteTask(this)">❌</span>
-        `;
-        document.getElementById("taskList").appendChild(li);
-        input.value = "";
-    }
-    ```
-    This function retrieves the task from the input field, validates it, dynamically creates a new list item (`<li>`) with the task text and a delete button, appends it to the `taskList`, and clears the input field.
-*   **`deleteTask()` Function:**
-    ```javascript
-    function deleteTask(element) {
-        element.parentElement.remove();
-    }
-    ```
-    This function is called when the delete (❌) icon is clicked. It receives the clicked `span` element, and then removes its parent element (the `<li>` representing the task) from the DOM.
+*   **`deleteTask(button)` Function:**
+    *   Takes the clicked delete button element as an argument.
+    *   Navigates up the DOM tree (`button.parentElement.parentElement`) to find the parent `<li>` element (the task item).
+    *   Removes this `<li>` element from the document, effectively deleting the task.
+*   **`markCompleted(button)` Function:**
+    *   Takes the clicked complete button element as an argument.
+    *   Finds the parent `<li>` element representing the task.
+    *   Uses `task.classList.toggle("completed successfully")` to add or remove the literal class string `"completed successfully"` from the task `<li>`.
+    *   Note: While the JavaScript toggles `"completed successfully"`, the `style.css` file specifically targets the `.completed` class to apply visual styling.
 
 ### `style.css`
 
-*   **Global Reset:**
-    ```css
-    *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
-    }
-    ```
-    A common CSS reset to ensure consistent styling across browsers.
-*   **Body Styling:**
-    ```css
-    body{
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        height:100vh;
-    }
-    ```
-    Centers the content of the application vertically and horizontally on the page.
-*   **`.container` Styling:**
-    ```css
-    .container{
-        background:white;
-        padding:20px;
-        width:400px;
-        border-radius:10px;
-        box-shadow:0 0 10px rgba(0,0,0,0.2);
-    }
-    ```
-    Defines the main content box with a white background, padding, fixed width, rounded corners, and a subtle shadow.
-*   **Task List Item (`li`) Styling:**
-    ```css
-    li{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        background:#eeeeee;
-        padding:10px;
-        margin-bottom:10px;
-        border-radius:5px;
-    }
-    ```
-    Styles individual task items to display content and the delete button side-by-side with appropriate spacing and background.
-*   **Delete Icon (`.delete`) Styling:**
-    ```css
-    .delete{
-        color:red;
-        cursor:pointer;
-        font-size:20px;
-    }
-    ```
-    Applies red color, increases font size, and sets a pointer cursor for the delete icon, indicating it's clickable.
+*   **Global Reset:** Uses `*` to reset `margin`, `padding`, and `box-sizing`.
+*   **Layout:** Employs Flexbox on the `body` to center the `.container` horizontally and vertically.
+*   **Container Styling:** Styles the main `.container` with a white background, padding, rounded corners, and a `box-shadow`.
+*   **Task List Styling:** Provides distinct styles for `ul` and `li` elements, including `display: flex` for layout within each task item and styling for the action buttons.
+*   **Task Actions:** Defines specific background colors and hover effects for `.complete-btn` (green) and `.delete-btn` (red).
+*   **Completed Task Style:** The `.completed` class applies `text-decoration: line-through` and changes the `color` to `gray`, visually indicating a completed task when applied to an `<li>` element.
 
 ## Usage Examples
 
-1.  **Open the application:** Navigate to `index.html` in your web browser.
-2.  **Add a new task:**
-    *   Type "Buy groceries" into the "Enter a task" input field.
+1.  **Adding a Task:**
+    *   Type your task, e.g., "Buy groceries", into the input field labeled "Enter a task".
     *   Click the "Add" button.
-    *   The task "Buy groceries" will appear in the list below.
-3.  **Attempt to add an empty task:**
-    *   Leave the input field empty.
-    *   Click the "Add" button.
-    *   An alert box will pop up saying "Please enter a task."
-4.  **Delete an existing task:**
-    *   Add a few tasks like "Read a book" and "Go for a walk".
-    *   To remove "Read a book", click the "❌" icon next to it.
-    *   The task "Read a book" will be immediately removed from the list.
+    *   The task will appear in the list below.
+
+2.  **Marking a Task as Completed:**
+    *   Locate the task you wish to mark (e.g., "Buy groceries").
+    *   Click the "✔" (check mark) button next to the task.
+    *   The task text will show a line through it and turn gray. Clicking it again will revert its status.
+
+3.  **Deleting a Task:**
+    *   Locate the task you wish to delete (e.g., "Buy groceries").
+    *   Click the "❌" (cross mark) button next to the task.
+    *   The task will be immediately removed from the list.
